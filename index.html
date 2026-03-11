@@ -119,11 +119,6 @@
           </div>
         </div>
         
-        <div id="bismillahArea" class="py-12 flex justify-center items-center">
-          <div id="bismillahText" class="font-bismillah text-slate-800 opacity-90 transition-opacity duration-500">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>
-        </div>
-      </div>
-      
       <div id="ayatList" class="space-y-24 pb-40"></div>
     </div>
   </main>
@@ -209,14 +204,6 @@
       document.getElementById('headerTitle').innerText = name;
       document.getElementById('surahMeta').innerText = `${meta.type} • ${meta.count} Ayat`;
       document.getElementById('mainAudio').src = `https://cdn.islamic.network/quran/audio-surah/128/ar.alafasy/${id}.mp3`;
-      
-      // Logika Bismillah: Sembunyikan jika Al-Fatihah (1) atau At-Taubah (9)
-      const bismillahArea = document.getElementById('bismillahArea');
-      if (id == 1 || id == 9) {
-        bismillahArea.classList.add('hidden');
-      } else {
-        bismillahArea.classList.remove('hidden');
-      }
       
       // Update Highlight Sidebar
       document.querySelectorAll('#sidebarList div').forEach(el => el.classList.remove('sidebar-active'));
