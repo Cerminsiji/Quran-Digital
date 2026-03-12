@@ -3,124 +3,94 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Al-Quran Digital</title>
+  <title>Mushaf Digital - Premium Edition</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    :root { --arabic-size: 2.8rem; }
-    body { font-family: 'Inter', sans-serif; background: #fafafa; overflow-x: hidden; scroll-behavior: smooth; }
+    :root { --arabic-size: 2.5rem; --primary-color: #2563eb; }
+    body { font-family: 'Inter', sans-serif; background: #ffffff; color: #334155; }
     
-    .font-quran { font-family: 'Amiri', serif; line-height: 2.8; direction: rtl; font-size: var(--arabic-size); }
-    .font-surah-ar { font-family: 'Amiri', serif; font-size: 1.8rem; color: #065f46; font-weight: 700; }
+    .font-quran { font-family: 'Amiri', serif; line-height: 2.2; direction: rtl; font-size: var(--arabic-size); }
     
-    /* Ornamen Penomoran Islami (Rub el Hizb) */
-    .quran-no {
-      display: inline-flex; align-items: center; justify-content: center;
-      width: 45px; height: 45px; background: #10b981; color: white;
-      font-weight: bold; font-size: 14px; position: relative;
-      clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
-    }
-    .surah-no {
-      width: 50px; height: 50px; background: #064e3b;
+    /* Replikasi Ornamen Nomor Surah */
+    .surah-no-modern {
+      width: 55px; height: 55px;
       display: flex; align-items: center; justify-content: center;
-      color: white; border-radius: 12px; transform: rotate(45deg);
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M50 0L61.2 38.8H100L68.8 61.2L80 100L50 77.5L20 100L31.2 61.2L0 38.8H38.8L50 0Z" fill="none" stroke="%23cbd5e1" stroke-width="2"/></svg>');
+      background-size: contain; background-repeat: no-repeat;
+      font-weight: 600; color: #64748b; font-size: 0.9rem;
     }
-    .surah-no span { transform: rotate(-45deg); font-weight: 800; }
 
-    /* Navigasi & UI */
-    .glass-nav { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(15px); border-bottom: 1px solid #f1f5f9; }
-    .sidebar-active { background: #f0fdf4 !important; border-right: 4px solid #059669; color: #065f46 !important; font-weight: 700; }
-    .card-hover:hover { transform: translateY(-3px); border-color: #10b981; box-shadow: 0 15px 30px -5px rgba(16, 185, 129, 0.1); }
+    .sidebar-active { background: #f8fafc !important; border-right: 4px solid var(--primary-color); color: var(--primary-color) !important; font-weight: 700; }
     .hide-scrollbar::-webkit-scrollbar { display: none; }
 
-    /* Desain Blok Bismillah Terpisah */
-    .bismillah-container {
-      margin-bottom: 3rem;
-      border-bottom: 2px solid #ecfdf5;
-      padding-bottom: 2rem;
+    /* Desain Ayat sesuai Screenshot */
+    .ayat-card {
+      background: white;
+      border: 1px solid #f1f5f9;
+      border-radius: 1rem;
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+      transition: all 0.3s ease;
     }
-    .bismillah-box {
+    .ayat-card:hover { border-color: #e2e8f0; box-shadow: 0 4px 20px -5px rgba(0,0,0,0.05); }
+
+    .bismillah-text {
       font-family: 'Amiri', serif;
+      font-size: 2.2rem;
+      color: #1e293b;
       text-align: center;
-      font-size: 2.5rem;
-      color: #064e3b;
-      background: #f0fdf4;
-      padding: 1.5rem;
-      border-radius: 1.5rem;
-      border: 1px solid #d1fae5;
-      box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.05);
-    }
-    
-    @media (min-width: 1024px) { 
-      .main-content { margin-left: 20rem; } 
-      .sidebar-fixed { transform: translateX(0) !important; } 
+      margin-bottom: 2.5rem;
+      opacity: 0.8;
     }
   </style>
 </head>
-<body class="text-slate-900">
+<body class="bg-slate-50/30">
 
-  <aside id="sidebar" class="fixed top-0 left-0 h-full w-80 bg-white z-[60] border-r border-slate-100 flex flex-col -translate-x-full sidebar-fixed transition-transform duration-300">
-    <div class="p-8 border-b border-slate-50">
-      <div onclick="showHome()" class="flex items-center gap-3 mb-6 cursor-pointer group">
-        <div class="bg-emerald-800 text-white p-2 rounded-xl shadow-lg group-hover:bg-emerald-700 transition-colors">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
-        </div>
-        <div>
-          <h1 class="font-bold text-emerald-900 text-xl tracking-tight">Mushaf Digital</h1>
-          <p class="text-[10px] text-emerald-600 font-bold tracking-widest uppercase">2026</p>
-        </div>
-      </div>
-      <input type="text" id="searchInput" onkeyup="filterSurah()" placeholder="Cari Surah..." class="w-full p-3 bg-slate-50 border border-slate-100 rounded-xl outline-none focus:ring-2 focus:ring-emerald-500/20 text-sm transition-all">
+  <aside id="sidebar" class="fixed top-0 left-0 h-full w-80 bg-white z-[60] border-r border-slate-100 flex flex-col -translate-x-full lg:translate-x-0 transition-transform duration-300">
+    <div class="p-6 border-b border-slate-50">
+      <h1 class="font-bold text-slate-800 text-lg mb-4 flex items-center gap-2">
+        <span class="text-blue-600">📖</span> Mushaf Digital
+      </h1>
+      <input type="text" id="searchInput" onkeyup="filterSurah()" placeholder="Cari surah..." class="w-full p-3 bg-slate-50 border border-slate-100 rounded-xl outline-none text-sm focus:border-blue-500 transition-all">
     </div>
-    <nav id="sidebarList" class="overflow-y-auto flex-1 p-4 space-y-1 hide-scrollbar bg-white"></nav>
+    <nav id="sidebarList" class="overflow-y-auto flex-1 p-2 space-y-1 hide-scrollbar"></nav>
   </aside>
 
-  <div id="overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-slate-900/20 backdrop-blur-sm z-[55] lg:hidden hidden transition-opacity duration-300"></div>
+  <div id="overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-slate-900/20 backdrop-blur-sm z-[55] lg:hidden hidden"></div>
 
-  <header class="glass-nav sticky top-0 z-50 p-4 main-content transition-all duration-300">
-    <div class="max-w-4xl mx-auto flex justify-between items-center px-2">
-      <button onclick="toggleSidebar()" class="lg:hidden p-2 text-slate-500 hover:bg-slate-100 rounded-lg">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-      </button>
-      
-      <div id="navControls" class="flex items-center gap-2 flex-1 justify-center lg:justify-start">
-        <div class="flex items-center gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200">
-          <button onclick="navSurah(-1)" class="p-2 hover:bg-white rounded-lg transition text-emerald-700 font-bold"><</button>
-          <span id="headerTitle" class="text-[11px] font-extrabold text-slate-700 uppercase tracking-widest px-4 min-w-[120px] text-center">Pilih Surah</span>
-          <button onclick="navSurah(1)" class="p-2 hover:bg-white rounded-lg transition text-emerald-700 font-bold">></button>
+  <main class="lg:ml-80 min-h-screen transition-all">
+    
+    <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-100 p-4">
+      <div class="max-w-4xl mx-auto flex justify-between items-center">
+        <button onclick="toggleSidebar()" class="lg:hidden p-2 text-slate-500">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+        </button>
+        <div id="headerInfo" class="text-center flex-1 lg:text-left lg:px-4">
+          <span id="headerTitle" class="font-bold text-slate-700">Pilih Surah</span>
+        </div>
+        <div class="flex gap-2">
+          <button onclick="adjustFont(-0.1)" class="w-8 h-8 rounded-full border border-slate-200 text-xs font-bold hover:bg-slate-50">A-</button>
+          <button onclick="adjustFont(0.1)" class="w-8 h-8 rounded-full border border-slate-200 text-xs font-bold hover:bg-slate-50">A+</button>
         </div>
       </div>
+    </header>
 
-      <div class="flex items-center gap-3">
-        <div class="flex items-center bg-emerald-50 rounded-full p-1 border border-emerald-100 shadow-sm">
-          <button onclick="adjustFont(-0.2)" class="w-8 h-8 flex items-center justify-center hover:bg-white rounded-full text-xs font-bold text-emerald-800 transition">A-</button>
-          <button onclick="adjustFont(0.2)" class="w-8 h-8 flex items-center justify-center hover:bg-white rounded-full text-xs font-bold text-emerald-800 transition">A+</button>
-        </div>
+    <div id="contentArea" class="p-4 md:p-8 max-w-4xl mx-auto">
+      <div id="homeView" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div id="loader" class="col-span-full text-center py-20 text-slate-400">Memuat Daftar Surah...</div>
       </div>
-    </div>
-  </header>
 
-  <main class="main-content p-6 md:p-12 transition-all duration-300 min-h-screen">
-    <div id="homeView" class="max-w-4xl mx-auto">
-      <div class="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
-        <div>
-          <h2 class="text-4xl font-bold text-slate-800 tracking-tight">Kalamullah</h2>
-          <p class="text-slate-400 mt-2 font-medium italic">"Maka bacalah apa yang mudah bagimu dari Al-Qur'an"</p>
+      <div id="readingView" class="hidden">
+        <div id="surahHeader" class="text-center mb-12 py-8 bg-white rounded-2xl border border-slate-100">
+            <p id="surahMeta" class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2"></p>
+            <h2 id="activeTitle" class="text-4xl font-medium text-blue-900 mb-6"></h2>
+            <div class="flex justify-center gap-4">
+                <audio id="mainAudio" controls class="h-10 opacity-70"></audio>
+            </div>
         </div>
+        <div id="ayatList"></div>
       </div>
-      <div id="loader" class="text-center py-20 animate-pulse text-emerald-800 font-bold">Mempersiapkan Lembaran Suci...</div>
-      <div id="surahGrid" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
-    </div>
-
-    <div id="readingView" class="hidden max-w-5xl mx-auto">
-      <div class="text-center mb-12 space-y-8 bg-white p-10 rounded-[2rem] border border-slate-50 shadow-sm">
-        <div id="surahMeta" class="text-[11px] font-bold text-emerald-600 uppercase tracking-[0.3em] bg-emerald-50 px-4 py-1 inline-block rounded-full border border-emerald-100"></div>
-        <h2 id="activeTitle" class="text-6xl font-bold text-emerald-900 italic tracking-tighter"></h2>
-        <div class="flex justify-center">
-          <audio id="mainAudio" controls class="h-10 w-64 md:w-96"></audio>
-        </div>
-      </div>
-      <div id="ayatList" class="space-y-16 pb-40"></div>
     </div>
   </main>
 
@@ -128,82 +98,64 @@
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyO5iRRs8v8s5KN_Q1y-7iPQgibRWF50CUvzLYIrp_zr23p1IOzU8JY17oBBZkJHus1/exec";
     let allSurahs = [];
     let currentSurahId = null;
-    let currentFontSize = 2.8;
+    let currentFontSize = 2.5;
     let surahMetaMap = {};
 
     window.onload = () => initApp();
 
-    function toggleSidebar(forceClose = false) {
-      const sb = document.getElementById('sidebar');
-      const ov = document.getElementById('overlay');
-      if (forceClose) {
-        sb.classList.add('-translate-x-full');
-        ov.classList.add('hidden');
-      } else {
-        sb.classList.toggle('-translate-x-full');
-        ov.classList.toggle('hidden');
-      }
-    }
-
-    function adjustFont(delta) {
-      currentFontSize = Math.min(Math.max(currentFontSize + delta, 1.8), 5.5);
-      document.documentElement.style.setProperty('--arabic-size', `${currentFontSize}rem`);
-    }
-
     async function initApp() {
       try {
         const response = await fetch(`${SCRIPT_URL}?action=getSurahList`);
-        const data = await response.json();
-        if(!data || data.length === 0) return;
-        allSurahs = data;
-        data.forEach(s => { surahMetaMap[s.id] = { type: s.type, count: s.count, nameAr: s.nameAr }; });
+        allSurahs = await response.json();
+        allSurahs.forEach(s => surahMetaMap[s.id] = s);
         document.getElementById('loader').classList.add('hidden');
-        renderGrid(data);
-        renderSidebar(data);
+        renderGrid(allSurahs);
+        renderSidebar(allSurahs);
       } catch(e) { console.error(e); }
     }
 
     function renderGrid(data) {
-      document.getElementById('surahGrid').innerHTML = data.map(s => `
-        <div onclick="openSurah(${s.id}, '${s.name.replace(/'/g, "\\'")}')" class="card-hover bg-white border border-slate-100 p-8 rounded-[2.5rem] cursor-pointer flex justify-between items-center shadow-sm transition-all">
-          <div class="flex items-center gap-6">
-            <div class="surah-no"><span>${s.id}</span></div>
-            <div class="space-y-2">
-              <h4 class="font-bold text-2xl text-slate-800 tracking-tight">${s.name}</h4>
-              <p class="text-[11px] text-slate-400 font-bold uppercase tracking-widest bg-slate-50 px-3 py-1 inline-block rounded-full border border-slate-100 shadow-inner">${s.type} • ${s.count} Ayat</p>
+      document.getElementById('homeView').innerHTML = data.map(s => `
+        <div onclick="openSurah(${s.id}, '${s.name}')" class="bg-white p-6 rounded-2xl border border-slate-100 flex justify-between items-center cursor-pointer hover:shadow-lg hover:shadow-blue-500/5 transition-all group">
+          <div class="flex items-center gap-5">
+            <div class="surah-no-modern">${s.id}</div>
+            <div>
+              <h4 class="font-bold text-lg text-slate-800 group-hover:text-blue-600 transition-colors">${s.name}</h4>
+              <p class="text-[11px] text-slate-400 font-bold uppercase tracking-wider flex items-center gap-1">
+                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M9 4.804A7.993 7.993 0 0111 5c.371 0 .733.025 1.088.073l.252-1.252A9.235 9.235 0 0011 3.75c-1.246 0-2.434.25-3.52.702l.52 1.352zM3.033 9.043l1.245-.251A7.962 7.962 0 015 8c0-.371.025-.733.073-1.088l-1.252-.252A9.235 9.235 0 003.75 8c0 1.246.25 2.434.702 3.52l1.352-.52zM17.469 11.437l-1.352.52A7.962 7.962 0 0115 12c0 .371-.025.733-.073 1.088l1.252.252A9.235 9.235 0 0016.25 12c0-1.246-.25-2.434-.702-3.52l-1.352.52zM11 17.469l.52-1.352A7.962 7.962 0 0112 15c.371 0 .733-.025 1.088-.073l.252 1.252A9.235 9.235 0 0012 16.25c-1.246 0-2.434-.25-3.52-.702l.52-1.352z"></path></svg>
+                ${s.count} Ayat
+              </p>
             </div>
           </div>
-          <div class="font-surah-ar text-emerald-800 opacity-80 text-3xl tracking-tight">${s.nameAr}</div>
+          <div class="font-quran text-2xl text-slate-400 group-hover:text-blue-900 transition-all opacity-60">${s.nameAr}</div>
         </div>`).join('');
     }
 
     function renderSidebar(data) {
       document.getElementById('sidebarList').innerHTML = data.map(s => `
-        <div onclick="openSurah(${s.id}, '${s.name.replace(/'/g, "\\'")}')" id="side-${s.id}" class="p-3 px-4 rounded-xl cursor-pointer text-sm hover:bg-emerald-50 text-slate-500 transition-all flex justify-between items-center group">
-          <span class="font-medium group-hover:text-emerald-700">${s.id}. ${s.name}</span>
-          <span class="font-quran text-lg opacity-30">${s.nameAr}</span>
+        <div onclick="openSurah(${s.id}, '${s.name}')" id="side-${s.id}" class="p-3 px-4 rounded-xl cursor-pointer text-sm hover:bg-slate-50 text-slate-500 transition-all flex justify-between items-center group">
+          <span>${s.id}. ${s.name}</span>
+          <span class="font-quran text-lg opacity-20">${s.nameAr}</span>
         </div>`).join('');
     }
 
     async function openSurah(id, name) {
       currentSurahId = id;
-      const meta = surahMetaMap[id] || { type: "Loading", count: "..." };
-      
-      // Fix Sidebar: Paksa tutup di mobile
-      if (window.innerWidth < 1024) toggleSidebar(true);
+      if (window.innerWidth < 1024) toggleSidebar();
 
       document.getElementById('homeView').classList.add('hidden');
       document.getElementById('readingView').classList.remove('hidden');
-      document.getElementById('activeTitle').innerText = name;
       document.getElementById('headerTitle').innerText = name;
-      document.getElementById('surahMeta').innerText = `${meta.type} • ${meta.count} Ayat`;
+      document.getElementById('activeTitle').innerText = name;
+      
+      const s = surahMetaMap[id];
+      document.getElementById('surahMeta').innerText = `${s.type} • ${s.count} Ayat`;
       document.getElementById('mainAudio').src = `https://cdn.islamic.network/quran/audio-surah/128/ar.alafasy/${id}.mp3`;
 
       document.querySelectorAll('#sidebarList div').forEach(el => el.classList.remove('sidebar-active'));
-      const activeSide = document.getElementById(`side-${id}`);
-      if(activeSide) activeSide.classList.add('sidebar-active');
+      if(document.getElementById(`side-${id}`)) document.getElementById(`side-${id}`).classList.add('sidebar-active');
 
-      document.getElementById('ayatList').innerHTML = `<div class="text-center py-20 text-emerald-800 font-bold animate-pulse">Menyiapkan Mushaf...</div>`;
+      document.getElementById('ayatList').innerHTML = `<div class="text-center py-20 animate-pulse text-slate-300">Menyiapkan Ayat...</div>`;
       window.scrollTo({top: 0, behavior: 'smooth'});
 
       try {
@@ -211,63 +163,58 @@
         const ayats = await res.json();
         
         document.getElementById('ayatList').innerHTML = ayats.map(a => {
-          let displayArabic = a.arab;
-          let bismillahHeader = "";
-          
-          // --- LOGIKA PEMISAH BISMILLAH PERMANEN ---
-          const bismillahRegex = /^بِسْمِ\s+اللَّهِ\s+الرَّحْمَنِ\s+الرَّحِيمِ\s*/;
-          const bismillahStandard = "بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ";
+          let arabText = a.arab;
+          let bismillah = "";
+          const bismillahStr = "بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ";
 
-          if (a.no == 1 && id != 1 && id != 9 && bismillahRegex.test(displayArabic)) {
-            displayArabic = displayArabic.replace(bismillahRegex, "").trim();
-            bismillahHeader = `
-              <div class="bismillah-container">
-                <div class="bismillah-box">${bismillahStandard}</div>
-              </div>`;
+          if (a.no == 1 && id != 1 && id != 9 && arabText.includes(bismillahStr)) {
+            arabText = arabText.replace(bismillahStr, "").trim();
+            bismillah = `<div class="bismillah-text">${bismillahStr}</div>`;
           }
 
           return `
-            <div class="group space-y-10 border-b border-slate-50 pb-20 px-4 bg-white p-10 rounded-[2rem] border border-slate-100 shadow-sm transition-all hover:bg-emerald-50/10">
-              ${bismillahHeader}
-              <div class="flex justify-between items-center">
-                <div class="quran-no">${a.no}</div>
-                <button onclick="new Audio('${a.audio}').play()" class="text-emerald-600 hover:scale-125 transition-transform text-xl shadow-inner bg-white p-2 rounded-full border border-slate-100">🔊</button>
+            ${bismillah}
+            <div class="ayat-card">
+              <div class="flex justify-between items-start mb-6">
+                <div class="flex gap-2">
+                    <button onclick="new Audio('${a.audio}').play()" class="w-9 h-9 flex items-center justify-center rounded-full bg-slate-50 hover:bg-blue-50 text-blue-600 transition-colors">▶</button>
+                    <button class="w-9 h-9 flex items-center justify-center rounded-full bg-slate-50 hover:bg-slate-100 text-slate-400">📋</button>
+                </div>
+                <div class="text-slate-400 font-medium text-sm">${id} : ${a.no}</div>
               </div>
-              <div class="font-quran text-right text-slate-800 leading-[3] tracking-wide">${displayArabic}</div>
-              <div class="space-y-6">
-                <p class="text-slate-500 text-lg leading-relaxed font-light pl-6 border-l-2 border-emerald-500 italic bg-slate-50 p-4 rounded-xl border border-slate-100 shadow-inner">${a.indo}</p>
-                <details class="bg-amber-50/40 p-5 rounded-2xl border border-amber-100 group/tafsir shadow-inner transition-all hover:bg-amber-100/50">
-                  <summary class="list-none flex justify-between cursor-pointer font-bold text-amber-800 uppercase text-[10px] tracking-widest transition-all">Tafsir Jalalain <span>▼</span></summary>
-                  <p class="mt-4 text-sm text-amber-900 leading-relaxed italic border-t border-amber-200/50 pt-4 bg-white/50 p-4 rounded-xl border border-amber-100">${a.tafsir}</p>
+              <div class="font-quran text-right text-slate-800 mb-8">${arabText}</div>
+              <div class="space-y-4">
+                <p class="text-slate-600 text-lg leading-relaxed">${a.indo}</p>
+                <details class="group">
+                  <summary class="list-none text-[10px] font-bold text-slate-400 uppercase tracking-widest cursor-pointer hover:text-blue-600 transition-colors">Tampilkan Tafsir</summary>
+                  <p class="mt-4 text-sm text-slate-500 italic bg-slate-50 p-4 rounded-xl border-l-4 border-blue-500">${a.tafsir}</p>
                 </details>
               </div>
             </div>`;
         }).join('');
-      } catch (err) {
-        document.getElementById('ayatList').innerHTML = `<p class="text-red-500 text-center font-bold">Gagal memuat ayat.</p>`;
-      }
+      } catch (err) { console.error(err); }
     }
 
-    function navSurah(step) {
-      const nextId = currentSurahId + step;
-      if (nextId >= 1 && nextId <= 114) {
-        const nextS = allSurahs.find(s => s.id == nextId);
-        if(nextS) openSurah(nextId, nextS.name);
-      }
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('-translate-x-full');
+      document.getElementById('overlay').classList.toggle('hidden');
     }
 
-    function showHome() {
-      toggleSidebar(true);
-      document.getElementById('homeView').classList.remove('hidden');
-      document.getElementById('readingView').classList.add('hidden');
-      document.getElementById('headerTitle').innerText = "Pilih Surah";
-      document.getElementById('mainAudio').pause();
-      window.scrollTo({top: 0, behavior: 'smooth'});
+    function adjustFont(delta) {
+      currentFontSize += delta;
+      document.documentElement.style.setProperty('--arabic-size', `${currentFontSize}rem`);
     }
 
     function filterSurah() {
       const q = document.getElementById('searchInput').value.toLowerCase();
       renderGrid(allSurahs.filter(s => s.name.toLowerCase().includes(q)));
+    }
+
+    function showHome() {
+      document.getElementById('homeView').classList.remove('hidden');
+      document.getElementById('readingView').classList.add('hidden');
+      document.getElementById('headerTitle').innerText = "Pilih Surah";
+      window.scrollTo({top: 0, behavior: 'smooth'});
     }
   </script>
 </body>
