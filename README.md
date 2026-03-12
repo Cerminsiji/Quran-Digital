@@ -1,55 +1,80 @@
-🕋 Al-Quran Digital adalah aplikasi Al-Qur'an berbasis web yang menggabungkan kecepatan Google Apps Script sebagai backend database (Google Sheets) dan fleksibilitas GitHub Pages sebagai hosting frontend. Dirancang dengan antarmuka profesional, islami, dan sepenuhnya responsif untuk perangkat mobile.
+# 🕋 Al-Quran Digital (Hybrid Cloud Mushaf)
 
-✨ Fitur Utama
- * Smart Mobile Navigation: Sidebar otomatis tertutup saat surah dipilih dan sistem navigasi Next/Prev yang ramah jempol.
- * Hybrid Data Source: Menggunakan API utama dari equran.id dengan sistem fallback ke alquran.cloud untuk memastikan Tafsir Jalalain selalu tersedia.
- * Audio Per Ayat & Per Surah: Mendukung pemutaran audio murottal oleh Syekh Mishary Rashid Al-Afasy.
- * UI/UX Islami Premium: Menggunakan palet warna Emerald Green, tipografi Amiri untuk teks Arab, dan desain kartu modern.
- * Dynamic Font Resizer: Memungkinkan pengguna mengubah ukuran teks Arab secara real-time demi kenyamanan membaca.
- * Copy to Clipboard: Fitur berbagi ayat yang rapi, mencakup teks Arab, terjemahan, dan referensi surah/ayat secara otomatis.
-   
-🛠️ Tentang Script (Teknologi)
-Proyek ini menggunakan arsitektur Serverless sederhana:
- * Frontend: HTML5, Tailwind CSS, dan JavaScript (Vanilla).
- * Backend/API: Google Apps Script (GAS) yang bertindak sebagai jembatan (bridge) antara API publik dan database cache.
- * Database: Google Sheets untuk menyimpan daftar surah dan teks ayat secara permanen guna mengurangi beban request ke API publik.
-   
-📡 Penggunaan API
-Script ini menyediakan dua endpoint internal yang bisa diakses melalui URL Web App Google Anda:
-1. Ambil Daftar Surah
-Endpoint: ?action=getSurahList
-Output: JSON berisi ID, Nama Latin, Nama Arab, Tipe (Makkiyah/Madaniyah), dan Jumlah Ayat.
-2. Ambil Detail Ayat
-Endpoint: ?action=getAyatData&surahId=[NOMOR_SURAH]
-Output: JSON berisi nomor ayat, teks Arab, terjemahan Indonesia, Tafsir Jalalain, dan link audio per ayat.
-🚀 Panduan Setup (Step by Step)
-Langkah 1: Persiapan Google Sheets
- * Buat Spreadsheet baru di Google Drive.
- * Buka menu Extensions > Apps Script.
- * Ubah nama proyek Seperti "Mushaf Backend".
-Langkah 2: Konfigurasi Backend (Code.gs)
- * Salin seluruh kode dari file Code.gs (tersedia di repositori ini) ke dalam editor Apps Script.
- * Simpan (Ctrl+S).
- * Jalankan fungsi initialSetup terlebih dahulu untuk membuat sheet database otomatis.
- * Jalankan fungsi syncDatabaseHybrid untuk menarik data Al-Qur'an dari API pusat ke Google Sheets Anda. (Tunggu hingga selesai).
-Langkah 3: Deployment Web App
- * Klik tombol Deploy > New Deployment.
- * Pilih jenis Web App.
- * Setel "Execute as" ke Me.
- * Setel "Who has access" ke Anyone.
- * Klik Deploy dan salin Web App URL yang muncul.
-Langkah 4: Konfigurasi Frontend untuk GitHub Pages
- * Buka file index.html di repositori GitHub Anda.
- * Cari variabel const SCRIPT_URL di bagian JavaScript.
- * Tempelkan Web App URL yang Anda salin dari Langkah 3 di sana:
-   const SCRIPT_URL = "https://script.google.com/macros/s/.../exec";
+[![Live Preview](https://img.shields.io/badge/Live-Preview-065f46?style=for-the-badge&logo=google-chrome&logoColor=white)](https://cerminsiji.github.io/Quran-Digital/)
+[![Tech](https://img.shields.io/badge/Stack-Serverless-orange?style=for-the-badge)](https://script.google.com/)
 
- * Commit dan Push perubahan tersebut ke GitHub.
-Langkah 5: Aktivasi GitHub Pages
- * Masuk ke tab Settings di repositori GitHub Anda.
- * Pilih menu Pages.
- * Pilih branch main dan folder /(root), lalu klik Save.
- * Tunggu beberapa saat, dan Al-Quran Digital Anda akan online!
-   
-📝 Disclaimer
-Data Al-Qur'an dalam proyek ini bersumber dari API publik. Pengguna disarankan untuk tetap merujuk pada Mushaf cetak standar untuk keperluan verifikasi hukum tajwid dan qira'ah yang lebih mendalam.
+**Al-Quran Digital** adalah platform Mushaf modern berbasis web yang menggabungkan efisiensi **Google Apps Script** sebagai engine database (Google Sheets) dan **GitHub Pages** sebagai hosting frontend yang ringan. Dirancang untuk pengalaman membaca yang khusyuk, responsif, dan elegan.
+
+---
+
+## ✨ Fitur Unggulan
+
+* **📱 Smart Mobile Navigation:** Sidebar adaptif yang otomatis tertutup saat surah dipilih serta sistem navigasi *Next/Prev* yang ramah penggunaan satu tangan.
+* **🌐 Hybrid Data Source:** Integrasi cerdas API utama dari `equran.id` dengan sistem *fallback* otomatis ke `alquran.cloud` guna memastikan ketersediaan **Tafsir Jalalain**.
+* **🎧 Audio Murottal Premium:** Dukungan audio per ayat dan per surah oleh **Syekh Mishary Rashid Al-Afasy**.
+* **🎨 UI/UX Islami Modern:** Estetika premium dengan palet warna *Emerald Green*, tipografi khat **Amiri**, dan desain kartu (*card-based*) yang bersih.
+* **🔍 Dynamic Font Resizer:** Kontrol ukuran teks Arab secara real-time untuk kenyamanan mata pengguna di berbagai ukuran layar.
+* **📋 Copy & Share:** Fitur salin ayat yang terformat rapi, mencakup teks Arab, terjemahan, dan referensi surah/ayat secara otomatis.
+
+---
+
+## 🛠️ Arsitektur Teknologi
+
+Proyek ini mengusung konsep **Serverless Architecture** untuk meminimalkan biaya operasional:
+
+* **Frontend:** HTML5, Tailwind CSS, dan JavaScript (Vanilla).
+* **Backend/API Bridge:** Google Apps Script (GAS) sebagai jembatan pemrosesan data.
+* **Database:** Google Sheets sebagai *cache database* permanen untuk mempercepat *load time* dan mengurangi ketergantungan pada API publik.
+
+---
+
+## 📡 Dokumentasi Endpoint (Internal API)
+
+Melalui URL Web App Google, Anda dapat mengakses data secara mandiri:
+
+| Action | Endpoint | Fungsi |
+| :--- | :--- | :--- |
+| **Daftar Surah** | `?action=getSurahList` | Mengambil info ID, Nama, Tipe (Makkiyah/Madaniyah), & Jumlah Ayat. |
+| **Detail Ayat** | `?action=getAyatData&surahId=[ID]` | Mengambil teks Arab, Terjemahan, Tafsir, & Link Audio per ayat. |
+
+---
+
+## 🚀 Panduan Instalasi (Step-by-Step)
+
+### 1️⃣ Persiapan Google Sheets
+1.  Buat Spreadsheet baru di **[Google Drive](https://sheets.new)**.
+2.  Buka menu **Extensions** > **Apps Script**.
+3.  Beri nama proyek: `Mushaf Backend`.
+
+### 2️⃣ Konfigurasi Backend (`Code.gs`)
+1.  Salin seluruh kode dari file `Code.gs` di repositori ini ke editor Apps Script.
+2.  **Jalankan fungsi** `initialSetup` untuk membuat struktur sheet secara otomatis.
+3.  **Jalankan fungsi** `syncDatabaseHybrid` untuk menarik data Al-Qur'an ke dalam database Anda.
+
+### 3️⃣ Deployment Web App
+1.  Klik **Deploy** > **New Deployment**.
+2.  Pilih jenis **Web App**.
+3.  Setel *Execute as* ke **Me** dan *Who has access* ke **Anyone**.
+4.  **Salin URL Web App** (URL ini adalah kunci penghubung frontend).
+
+### 4️⃣ Konfigurasi Frontend (GitHub)
+1.  Buka file `index.html` di repositori GitHub Anda.
+2.  Cari variabel `const SCRIPT_URL` dan tempelkan URL Web App Anda:
+    ```javascript
+    const SCRIPT_URL = "[https://script.google.com/macros/s/.../exec](https://script.google.com/macros/s/.../exec)";
+    ```
+3.  *Commit* dan *Push* perubahan ke GitHub.
+
+### 5️⃣ Aktivasi GitHub Pages
+1.  Buka tab **Settings** di repositori GitHub Anda.
+2.  Pilih menu **Pages** di sidebar kiri.
+3.  Pilih branch **main** dan folder **/(root)**, lalu klik **Save**.
+4.  Tunggu 1-3 menit, Al-Quran Digital Anda telah online!
+
+---
+
+## 📝 Disclaimer
+
+> Data Al-Qur'an dalam proyek ini bersumber dari API publik untuk tujuan kemudahan akses digital. Pengguna sangat disarankan untuk tetap merujuk pada **Mushaf Cetak Standar** (Kemenag/Madinah) untuk keperluan verifikasi hukum tajwid dan qira'ah yang lebih mendalam.
+
+---
