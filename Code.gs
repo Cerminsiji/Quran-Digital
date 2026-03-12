@@ -13,7 +13,7 @@ function doGet(e) {
       return ContentService.createTextOutput(JSON.stringify({error: err.message})).setMimeType(ContentService.MimeType.JSON);
     }
   }
-  return HtmlService.createTemplateFromFile('index').evaluate()
+  return HtmlService.createTemplateFromFile('Index').evaluate()
     .setTitle('Mushaf Digital Pro')
     .addMetaTag('viewport', 'width=device-width, initial-scale=1');
 }
