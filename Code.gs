@@ -14,7 +14,7 @@ function doGet(e) {
     }
   }
   return HtmlService.createTemplateFromFile('Index').evaluate()
-    .setTitle('Mushaf Digital Pro')
+    .setTitle('Al-Quran Digital')
     .addMetaTag('viewport', 'width=device-width, initial-scale=1');
 }
 
