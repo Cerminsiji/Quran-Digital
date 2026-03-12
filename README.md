@@ -1,5 +1,4 @@
-🕋 Al-Quran Digital
-Mushaf Digital Pro adalah aplikasi Al-Qur'an berbasis web yang menggabungkan kecepatan Google Apps Script sebagai backend database (Google Sheets) dan fleksibilitas GitHub Pages sebagai hosting frontend. Dirancang dengan antarmuka profesional, islami, dan sepenuhnya responsif untuk perangkat mobile.
+🕋 Al-Quran Digital adalah aplikasi Al-Qur'an berbasis web yang menggabungkan kecepatan Google Apps Script sebagai backend database (Google Sheets) dan fleksibilitas GitHub Pages sebagai hosting frontend. Dirancang dengan antarmuka profesional, islami, dan sepenuhnya responsif untuk perangkat mobile.
 
 ✨ Fitur Utama
  * Smart Mobile Navigation: Sidebar otomatis tertutup saat surah dipilih dan sistem navigasi Next/Prev yang ramah jempol.
