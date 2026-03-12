@@ -1,221 +1,99 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Mushaf Digital - Premium Edition</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    :root { --arabic-size: 2.5rem; --primary-color: #2563eb; }
-    body { font-family: 'Inter', sans-serif; background: #ffffff; color: #334155; }
-    
-    .font-quran { font-family: 'Amiri', serif; line-height: 2.2; direction: rtl; font-size: var(--arabic-size); }
-    
-    /* Replikasi Ornamen Nomor Surah */
-    .surah-no-modern {
-      width: 55px; height: 55px;
-      display: flex; align-items: center; justify-content: center;
-      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M50 0L61.2 38.8H100L68.8 61.2L80 100L50 77.5L20 100L31.2 61.2L0 38.8H38.8L50 0Z" fill="none" stroke="%23cbd5e1" stroke-width="2"/></svg>');
-      background-size: contain; background-repeat: no-repeat;
-      font-weight: 600; color: #64748b; font-size: 0.9rem;
-    }
-
-    .sidebar-active { background: #f8fafc !important; border-right: 4px solid var(--primary-color); color: var(--primary-color) !important; font-weight: 700; }
-    .hide-scrollbar::-webkit-scrollbar { display: none; }
-
-    /* Desain Ayat sesuai Screenshot */
-    .ayat-card {
-      background: white;
-      border: 1px solid #f1f5f9;
-      border-radius: 1rem;
-      padding: 2rem;
-      margin-bottom: 1.5rem;
-      transition: all 0.3s ease;
-    }
-    .ayat-card:hover { border-color: #e2e8f0; box-shadow: 0 4px 20px -5px rgba(0,0,0,0.05); }
-
-    .bismillah-text {
-      font-family: 'Amiri', serif;
-      font-size: 2.2rem;
-      color: #1e293b;
-      text-align: center;
-      margin-bottom: 2.5rem;
-      opacity: 0.8;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mushaf Digital Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --ar-size: 2.5rem; }
+        body { font-family: 'Inter', sans-serif; background: #fff; color: #1e293b; }
+        .font-quran { font-family: 'Amiri', serif; line-height: 3; direction: rtl; font-size: var(--ar-size); }
+        .surah-card { border: 1px solid #f1f5f9; transition: all 0.2s; cursor: pointer; border-radius: 1rem; }
+        .surah-card:hover { border-color: #3b82f6; background: #eff6ff; transform: translateY(-2px); }
+        .nav-active { background: #eff6ff; color: #2563eb !important; font-weight: 700; }
+    </style>
 </head>
 <body class="bg-slate-50/30">
-
-  <aside id="sidebar" class="fixed top-0 left-0 h-full w-80 bg-white z-[60] border-r border-slate-100 flex flex-col -translate-x-full lg:translate-x-0 transition-transform duration-300">
-    <div class="p-6 border-b border-slate-50">
-      <h1 class="font-bold text-slate-800 text-lg mb-4 flex items-center gap-2">
-        <span class="text-blue-600">📖</span> Mushaf Digital
-      </h1>
-      <input type="text" id="searchInput" onkeyup="filterSurah()" placeholder="Cari surah..." class="w-full p-3 bg-slate-50 border border-slate-100 rounded-xl outline-none text-sm focus:border-blue-500 transition-all">
-    </div>
-    <nav id="sidebarList" class="overflow-y-auto flex-1 p-2 space-y-1 hide-scrollbar"></nav>
-  </aside>
-
-  <div id="overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-slate-900/20 backdrop-blur-sm z-[55] lg:hidden hidden"></div>
-
-  <main class="lg:ml-80 min-h-screen transition-all">
-    
-    <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-100 p-4">
-      <div class="max-w-4xl mx-auto flex justify-between items-center">
-        <button onclick="toggleSidebar()" class="lg:hidden p-2 text-slate-500">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-        </button>
-        <div id="headerInfo" class="text-center flex-1 lg:text-left lg:px-4">
-          <span id="headerTitle" class="font-bold text-slate-700">Pilih Surah</span>
+    <aside id="sidebar" class="fixed left-0 top-0 h-full w-72 bg-white border-r z-50 -translate-x-full lg:translate-x-0 transition-transform flex flex-col">
+        <div class="p-6 border-b">
+            <h1 class="font-bold text-xl text-blue-600">Mushaf Pro</h1>
+            <input type="text" id="search" onkeyup="filter()" placeholder="Cari surah..." class="w-full mt-4 p-2 bg-slate-100 rounded-lg text-sm outline-none focus:ring-2 focus:ring-blue-500/20">
         </div>
-        <div class="flex gap-2">
-          <button onclick="adjustFont(-0.1)" class="w-8 h-8 rounded-full border border-slate-200 text-xs font-bold hover:bg-slate-50">A-</button>
-          <button onclick="adjustFont(0.1)" class="w-8 h-8 rounded-full border border-slate-200 text-xs font-bold hover:bg-slate-50">A+</button>
-        </div>
-      </div>
-    </header>
+        <nav id="sideList" class="flex-1 overflow-y-auto p-4 space-y-1"></nav>
+    </aside>
 
-    <div id="contentArea" class="p-4 md:p-8 max-w-4xl mx-auto">
-      <div id="homeView" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div id="loader" class="col-span-full text-center py-20 text-slate-400">Memuat Daftar Surah...</div>
-      </div>
-
-      <div id="readingView" class="hidden">
-        <div id="surahHeader" class="text-center mb-12 py-8 bg-white rounded-2xl border border-slate-100">
-            <p id="surahMeta" class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2"></p>
-            <h2 id="activeTitle" class="text-4xl font-medium text-blue-900 mb-6"></h2>
-            <div class="flex justify-center gap-4">
-                <audio id="mainAudio" controls class="h-10 opacity-70"></audio>
+    <main class="lg:ml-72 min-h-screen">
+        <header class="sticky top-0 bg-white/80 backdrop-blur-md border-b z-40 p-4 px-6 flex justify-between items-center">
+            <button onclick="toggleSide()" class="lg:hidden p-2">☰</button>
+            <div id="topInfo" class="text-center lg:text-left"><span id="title" class="font-bold">Daftar Surah</span></div>
+            <div class="flex gap-2">
+                <button onclick="zoom(-0.1)" class="p-2 bg-slate-100 rounded-lg text-xs font-bold">A-</button>
+                <button onclick="zoom(0.1)" class="p-2 bg-slate-100 rounded-lg text-xs font-bold">A+</button>
             </div>
-        </div>
-        <div id="ayatList"></div>
-      </div>
-    </div>
-  </main>
+        </header>
 
-  <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyO5iRRs8v8s5KN_Q1y-7iPQgibRWF50CUvzLYIrp_zr23p1IOzU8JY17oBBZkJHus1/exec";
-    let allSurahs = [];
-    let currentSurahId = null;
-    let currentFontSize = 2.5;
-    let surahMetaMap = {};
-
-    window.onload = () => initApp();
-
-    async function initApp() {
-      try {
-        const response = await fetch(`${SCRIPT_URL}?action=getSurahList`);
-        allSurahs = await response.json();
-        allSurahs.forEach(s => surahMetaMap[s.id] = s);
-        document.getElementById('loader').classList.add('hidden');
-        renderGrid(allSurahs);
-        renderSidebar(allSurahs);
-      } catch(e) { console.error(e); }
-    }
-
-    function renderGrid(data) {
-      document.getElementById('homeView').innerHTML = data.map(s => `
-        <div onclick="openSurah(${s.id}, '${s.name}')" class="bg-white p-6 rounded-2xl border border-slate-100 flex justify-between items-center cursor-pointer hover:shadow-lg hover:shadow-blue-500/5 transition-all group">
-          <div class="flex items-center gap-5">
-            <div class="surah-no-modern">${s.id}</div>
-            <div>
-              <h4 class="font-bold text-lg text-slate-800 group-hover:text-blue-600 transition-colors">${s.name}</h4>
-              <p class="text-[11px] text-slate-400 font-bold uppercase tracking-wider flex items-center gap-1">
-                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M9 4.804A7.993 7.993 0 0111 5c.371 0 .733.025 1.088.073l.252-1.252A9.235 9.235 0 0011 3.75c-1.246 0-2.434.25-3.52.702l.52 1.352zM3.033 9.043l1.245-.251A7.962 7.962 0 015 8c0-.371.025-.733.073-1.088l-1.252-.252A9.235 9.235 0 003.75 8c0 1.246.25 2.434.702 3.52l1.352-.52zM17.469 11.437l-1.352.52A7.962 7.962 0 0115 12c0 .371-.025.733-.073 1.088l1.252.252A9.235 9.235 0 0016.25 12c0-1.246-.25-2.434-.702-3.52l-1.352.52zM11 17.469l.52-1.352A7.962 7.962 0 0112 15c.371 0 .733-.025 1.088-.073l.252 1.252A9.235 9.235 0 0012 16.25c-1.246 0-2.434-.25-3.52-.702l.52-1.352z"></path></svg>
-                ${s.count} Ayat
-              </p>
-            </div>
-          </div>
-          <div class="font-quran text-2xl text-slate-400 group-hover:text-blue-900 transition-all opacity-60">${s.nameAr}</div>
-        </div>`).join('');
-    }
-
-    function renderSidebar(data) {
-      document.getElementById('sidebarList').innerHTML = data.map(s => `
-        <div onclick="openSurah(${s.id}, '${s.name}')" id="side-${s.id}" class="p-3 px-4 rounded-xl cursor-pointer text-sm hover:bg-slate-50 text-slate-500 transition-all flex justify-between items-center group">
-          <span>${s.id}. ${s.name}</span>
-          <span class="font-quran text-lg opacity-20">${s.nameAr}</span>
-        </div>`).join('');
-    }
-
-    async function openSurah(id, name) {
-      currentSurahId = id;
-      if (window.innerWidth < 1024) toggleSidebar();
-
-      document.getElementById('homeView').classList.add('hidden');
-      document.getElementById('readingView').classList.remove('hidden');
-      document.getElementById('headerTitle').innerText = name;
-      document.getElementById('activeTitle').innerText = name;
-      
-      const s = surahMetaMap[id];
-      document.getElementById('surahMeta').innerText = `${s.type} • ${s.count} Ayat`;
-      document.getElementById('mainAudio').src = `https://cdn.islamic.network/quran/audio-surah/128/ar.alafasy/${id}.mp3`;
-
-      document.querySelectorAll('#sidebarList div').forEach(el => el.classList.remove('sidebar-active'));
-      if(document.getElementById(`side-${id}`)) document.getElementById(`side-${id}`).classList.add('sidebar-active');
-
-      document.getElementById('ayatList').innerHTML = `<div class="text-center py-20 animate-pulse text-slate-300">Menyiapkan Ayat...</div>`;
-      window.scrollTo({top: 0, behavior: 'smooth'});
-
-      try {
-        const res = await fetch(`${SCRIPT_URL}?action=getAyatData&surahId=${id}`);
-        const ayats = await res.json();
-        
-        document.getElementById('ayatList').innerHTML = ayats.map(a => {
-          let arabText = a.arab;
-          let bismillah = "";
-          const bismillahStr = "بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ";
-
-          if (a.no == 1 && id != 1 && id != 9 && arabText.includes(bismillahStr)) {
-            arabText = arabText.replace(bismillahStr, "").trim();
-            bismillah = `<div class="bismillah-text">${bismillahStr}</div>`;
-          }
-
-          return `
-            ${bismillah}
-            <div class="ayat-card">
-              <div class="flex justify-between items-start mb-6">
-                <div class="flex gap-2">
-                    <button onclick="new Audio('${a.audio}').play()" class="w-9 h-9 flex items-center justify-center rounded-full bg-slate-50 hover:bg-blue-50 text-blue-600 transition-colors">▶</button>
-                    <button class="w-9 h-9 flex items-center justify-center rounded-full bg-slate-50 hover:bg-slate-100 text-slate-400">📋</button>
+        <div id="content" class="p-6 max-w-4xl mx-auto">
+            <div id="grid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+            <div id="reader" class="hidden">
+                <div class="text-center mb-10">
+                    <h2 id="rName" class="text-4xl font-bold"></h2>
+                    <audio id="player" controls class="mx-auto mt-6 w-full max-w-xs"></audio>
                 </div>
-                <div class="text-slate-400 font-medium text-sm">${id} : ${a.no}</div>
-              </div>
-              <div class="font-quran text-right text-slate-800 mb-8">${arabText}</div>
-              <div class="space-y-4">
-                <p class="text-slate-600 text-lg leading-relaxed">${a.indo}</p>
-                <details class="group">
-                  <summary class="list-none text-[10px] font-bold text-slate-400 uppercase tracking-widest cursor-pointer hover:text-blue-600 transition-colors">Tampilkan Tafsir</summary>
-                  <p class="mt-4 text-sm text-slate-500 italic bg-slate-50 p-4 rounded-xl border-l-4 border-blue-500">${a.tafsir}</p>
-                </details>
-              </div>
-            </div>`;
-        }).join('');
-      } catch (err) { console.error(err); }
-    }
+                <div id="ayahs"></div>
+            </div>
+        </div>
+    </main>
 
-    function toggleSidebar() {
-      document.getElementById('sidebar').classList.toggle('-translate-x-full');
-      document.getElementById('overlay').classList.toggle('hidden');
-    }
+    <script>
+      //Masukkan Url Apps Script
+        const API = "https://script.google.com/macros/s/AKfycbyO5iRRs8v8s5KN_Q1y-7iPQgibRWF50CUvzLYIrp_zr23p1IOzU8JY17oBBZkJHus1/exec";
+        let data = [];
 
-    function adjustFont(delta) {
-      currentFontSize += delta;
-      document.documentElement.style.setProperty('--arabic-size', `${currentFontSize}rem`);
-    }
+        async function init() {
+            const res = await fetch(`${API}?action=getSurahList`);
+            data = await res.json();
+            render();
+        }
 
-    function filterSurah() {
-      const q = document.getElementById('searchInput').value.toLowerCase();
-      renderGrid(allSurahs.filter(s => s.name.toLowerCase().includes(q)));
-    }
+        function render() {
+            const grid = document.getElementById('grid');
+            const side = document.getElementById('sideList');
+            grid.innerHTML = data.map(s => `
+                <div onclick="read(${s.id},'${s.name}')" class="surah-card p-4 flex items-center gap-4 bg-white">
+                    <div class="w-10 h-10 bg-blue-600 text-white flex items-center justify-center rounded-lg font-bold">${s.id}</div>
+                    <div class="flex-1">
+                        <div class="font-bold text-sm">${s.name}</div>
+                        <div class="text-[10px] text-slate-400 uppercase font-bold">${s.type} • ${s.count} AYAT</div>
+                    </div>
+                    <div class="font-quran text-xl opacity-20">${s.nameAr}</div>
+                </div>`).join('');
+            side.innerHTML = data.map(s => `<div onclick="read(${s.id},'${s.name}')" class="p-2 text-sm cursor-pointer hover:text-blue-600">${s.id}. ${s.name}</div>`).join('');
+        }
 
-    function showHome() {
-      document.getElementById('homeView').classList.remove('hidden');
-      document.getElementById('readingView').classList.add('hidden');
-      document.getElementById('headerTitle').innerText = "Pilih Surah";
-      window.scrollTo({top: 0, behavior: 'smooth'});
-    }
-  </script>
+        async function read(id, name) {
+            document.getElementById('grid').classList.add('hidden');
+            document.getElementById('reader').classList.remove('hidden');
+            document.getElementById('title').innerText = name;
+            document.getElementById('rName').innerText = name;
+            const res = await fetch(`${API}?action=getAyatData&surahId=${id}`);
+            const ayats = await res.json();
+            document.getElementById('ayahs').innerHTML = ayats.map(a => `
+                <div class="py-8 border-b">
+                    <div class="flex justify-between mb-4">
+                        <span class="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded">${id}:${a.no}</span>
+                        <button onclick="new Audio('${a.audio}').play()" class="text-slate-300 hover:text-blue-600">▶ Putar</button>
+                    </div>
+                    <div class="font-quran text-right mb-6">${a.arab}</div>
+                    <p class="text-slate-600 leading-relaxed">${a.indo}</p>
+                    <details class="mt-4 text-xs text-slate-400"><summary class="cursor-pointer">Tafsir</summary><p class="mt-2 italic">${a.tafsir}</p></details>
+                </div>`).join('');
+        }
+
+        function toggleSide() { document.getElementById('sidebar').classList.toggle('-translate-x-full'); }
+        function zoom(v) { document.documentElement.style.setProperty('--ar-size', (parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--ar-size')) + v) + 'rem'); }
+        window.onload = init;
+    </script>
 </body>
 </html>
