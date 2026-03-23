@@ -42,7 +42,7 @@
     },
     {
       "src": "screenshots/mobile.jpg",
-      "sizes": "750x1334",
+      "sizes": "1080x2157",
       "type": "image/jpeg",
       "form_factor": "narrow",
       "label": "Tampilan Mobile Al-Quran Digital"
