@@ -279,17 +279,22 @@
       });
     }
   </script>
+/* PWA Start */
   <link rel="manifest" href="manifest.json">
 
 <script>
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('./sw.js')
-        .then(reg => console.log('Service Worker terdaftar!', reg))
-        .catch(err => console.log('Gagal daftar SW:', err));
+      // Menentukan path sw.js secara dinamis berdasarkan lokasi file saat ini
+      const swPath = './sw.js'; 
+      
+      navigator.serviceWorker.register(swPath)
+        .then(reg => console.log('PWA Terdaftar di scope:', reg.scope))
+        .catch(err => console.error('PWA Gagal:', err));
     });
   }
 </script>
+  /* PWA END */
   
 </body>
 </html>
