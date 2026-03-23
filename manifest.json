@@ -53,9 +53,21 @@
       "type": "image/png"
     }
   ],
-    "start_url": "./index.html",
+  "start_url": "./index.html",
   "background_color": "#ffffff",
   "display": "standalone",
   "scope": "./",
-  "theme_color": "#007bff"
+  "theme_color": "#007bff",
+  "id": "QID",
+  "description": "Mushaf Al-Quran modern berbasis Web dengan engine Google Apps Script &amp; Google Sheets.",
+  "dir": "auto",
+  "lang": "id",
+  "orientation": "any",
+  "categories": [
+    "books",
+    "education",
+    "health",
+    "lifestyle",
+    "utilities"
+  ]
 }
