@@ -34,14 +34,14 @@
   ],
   "screenshots": [
     {
-      "src": "screenshots/desktop.png",
+      "src": "screenshots/desktop.jpg",
       "sizes": "1280x720",
       "type": "image/png",
       "form_factor": "wide",
       "label": "Tampilan Desktop Al-Quran Digital"
     },
     {
-      "src": "screenshots/mobile.png",
+      "src": "screenshots/mobile.jpg",
       "sizes": "750x1334",
       "type": "image/png",
       "form_factor": "narrow",
