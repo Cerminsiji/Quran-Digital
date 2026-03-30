@@ -15,8 +15,8 @@
   "display": "standalone",
   "display_override": ["window-controls-overlay", "minimal-ui"],
   "orientation": "any",
+  "theme_color": "#065f46",
   "background_color": "#ffffff",
-  "theme_color": "#007bff",
   "scope": "./",
   "icons": [
     {
